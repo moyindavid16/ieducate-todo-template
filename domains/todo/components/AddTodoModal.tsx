@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {Button} from "@/components/ui/button";
 
 interface AddTodoModalProps {
   onAddTodo: (todo: {title: string; description: string}) => void;
@@ -36,10 +37,10 @@ export function AddTodoModal({onAddTodo}: AddTodoModalProps) {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <button className="flex items-center gap-2 px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+        <Button className="flex items-center gap-2">
           <Plus size={16} />
           Add Todo
-        </button>
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -68,12 +69,10 @@ export function AddTodoModal({onAddTodo}: AddTodoModalProps) {
           </div>
         </div>
         <DialogFooter>
-          <button onClick={() => setIsDialogOpen(false)} className="px-4 py-2 border rounded hover:bg-gray-50">
+          <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
             Cancel
-          </button>
-          <button onClick={handleAddTodo} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-            Add Todo
-          </button>
+          </Button>
+          <Button onClick={handleAddTodo}>Add Todo</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
