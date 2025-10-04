@@ -2,6 +2,26 @@
 
 We have prepared for you a base version of a todo app. The point of this is to show you how a NextJS application is structured, teach you a few things about making web applications, and give you some practice with web development.
 
+## Getting started
+Fork the repo to get the base version on your system. TLs can help with this!
+
+Make a /.env file and put this inside
+```
+NEXT_PUBLIC_SUPABASE_URL=https://bsnfzfjxlxvgyabxqcbd.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzbmZ6Zmp4bHh2Z3lhYnhxY2JkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk1NDkwNDgsImV4cCI6MjA3NTEyNTA0OH0.CvvV4LI2UmTV33D0snd7hcSMzDEtIFrSdLqbUn6dmRc
+```
+
+run 
+```
+npm i
+```
+in the terminal at root folder to install all dependencies for the project
+
+***Start application*** by running:
+```
+npm run dev
+```
+in terminal at the root folder. Then you can click the link to see the app.
 
 ## What is the state of the project
 
@@ -101,3 +121,6 @@ npm run dev
 in terminal at the root folder.
 
 
+Use AI to help explore and understand the project!
+
+Ask TLs for help!
