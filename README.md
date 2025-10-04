@@ -1,105 +1,103 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# Todo App Practice Application
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+We have prepared for you a base version of a todo app. The point of this is to show you how a NextJS application is structured, teach you a few things about making web applications, and give you some practice with web development.
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
 
-## Features
+## What is the state of the project
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Password-based authentication block installed via the [Supabase UI Library](https://supabase.com/ui/docs/nextjs/password-based-auth)
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+Currently, users can put in their username, see their todos and create new todos. Todos are persisted on a supabase database.
 
-## Demo
+## What are you going to do?
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+You are going to read through the current codebase to get a feel for how to make these things. Then you will implement functionality for editing and deleting todos.
 
-## Deploy to Vercel
+## Explanation of project structure
 
-Vercel deployment will guide you through creating a Supabase account and project.
+Before we get into this, it is important to explain the client-server paradigm. A client is most of the time the end user on a web browser. The server is a computer(could be more than one actually) that manages resources and provides them to the client. They are seperate machines and communicate by sending requests and responses between each other. 
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+Next is NextJS(lol). NextJS is a react framework we will be using that will aloow us to build the backend(server) and frontend(client) within the same codebase in a nice way. 
+Check it out: https://nextjs.org/
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+React was made by facebook and allows us to build powerful web pages in a modular manner. We can make components that are dynamic and reusable. It makes for a good dev experience as opposd to using regular HTML, CSS, JS. We are also using Typescript which is a superset of javascript. It is just Javascript with types. 
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+Javascript, CSS and HTML power the web. HTML determines how things are structured on the page, CSS determines the design and Javascript does the stuff that makes things functional and non-static.
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+If you're feeling not  up to speed on some of these, you can ask a TL or read up on them shortly!
 
-## Clone and run locally
+## General Flow
+The frontend(client) displays the users todos based on their username. The frontend renders a web page on the users screen based on the user's todo data that it requested from the server. The server gets the todos for that user from the database and sends it to the client. Whenever the user creates a new todo, the client sends a request for the server to carry out that action. The server handles the action and the new todo can be seen on the screen on completion.
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+## Project Structure
 
-2. Create a Next.js app using the Supabase Starter template npx command
+### /app 
+The app folder is the entry point for our application. Core page and layout components are stored in here. NextJS uses a folder structure to determine the page hierarchy. A page is identified by a file with the name page.tsx. So the file app/home/page.tsx is what determines what is shown on our websites: examplewebsitedomain.com/home page. Right now, we have no nested folders we just have app/page.tsx which means our websites / url.
 
-   ```bash
-   npx create-next-app --example with-supabase with-supabase-app
-   ```
+There's also something called a layout file that helps define shared content(like sidebars) across various pages within the same folder. For example, we could have settings/profile/page.tsx and settings/preferences/page.tsx share a sidebar by defining a single layout file in settings/layout.tsx. You can read more on this but for now not important for this tutorial.
 
-   ```bash
-   yarn create next-app --example with-supabase with-supabase-app
-   ```
+### /app/api 
+This is a reserved folder that defines our API handlers for our backend. When the client makes a request to our server, they make a request to an api endpoint. If you're not familiar you could watch a quick video on it but generally api handlers are basically always on, waiting for client requests. There are different handlers for different operations. Just like the webpages, there is a special file name, route.ts for defining the api routes. Currently, we have api/todos/route.ts which defines api handlers for getting and creating todos.
 
-   ```bash
-   pnpm create next-app --example with-supabase with-supabase-app
-   ```
+### /components
+We use the shadcn component library for a set of prestyled elements we can use on the frontend. Those components, when added are over here.
 
-3. Use `cd` to change into the app's directory
+### /domains
+We would like to keep the app folder clean so basically all the components and hooks we create are organized in this folder.
 
-   ```bash
-   cd with-supabase-app
-   ```
+### /domains/api/managers
+Whenever an api handler runs, it needs to carry out some logic to satisfy the users reqwuest. We abstract that logic to a manager. right now we have /domains/api/managers/todoManager. In this manager, we have logic to get and create todos. The manager is mainly an orchestrator, piecing together different operations and business logic.
 
-4. Rename `.env.example` to `.env.local` and update the following:
+### domains/api/dals
+The DALs do the actual data fetching. DAL stands for data access layer. We have domains/api/dals/todoDAL. This DAL has logic for actually carrying out the create and get operations directly on our database. The manager uses this directly to achieve results. 
 
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
-   ```
+NOTE: This might seem redundant for this project but as for larger projects, this structure is very helpful to keep things organized and neat especially when the manager does more than just fetching data(maybe filetering, joining stuff, etc).
 
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://supabase.com/dashboard/project/_?showConnect=true)
+So the chain is like: User -> API Handler -> Manager -> DAL. And result is returned up to the user.
 
-5. You can now run the Next.js local development server:
+### Hooks
+Hooks are basically frontend functions that abstract some logic for us. This is a bad definition but basically they are that. We use hooks to encapsulate the reuest making logic. We have domains/todo/hooks/useCreateTodo.ts and domains/todo/hooks/useGetTodos.ts hooks that cmake requests to create and get todos respectively. We use TanstackQuery(formerly known as react query) for the request mking and management stuff. You can search up their docs for more info.
 
-   ```bash
-   npm run dev
-   ```
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+## Bringing it all together
+1. Uer opens the website. The client call the gettodos hook.
+2. The gettodos hook sends a request to the server(api handler) to give us the todos for a given username.
+3.  The api handler recieves the request and calls the todomanger's getTodo function.
+4. The todomanager's gettodo calls the todoDal's getTodo
+5. The dal gets the data from the databse and returns it to the manager which returns to the api handler which sends a response to the client.
+6. This takes some small time but the response containing the users todos is recieved on the client and the client displays that data
+7. All the todos are rendered as a TodoEntry component. Modularization and reusability!
+8. The user wants to add a todo so the user clicks the add todo button(shadcn component but we define the logic for what happens when its clicked)
+9. Modal opens up asking for the users todo details. The user types them in and hits save.
+10. The createTodo hook is called and a request to create the given todo is made to the server api handler. 
+11. API handler -> manager -> dal. It's created and the api handler sends a response to the client that the todo was created.
+12. The client recieves the response and knows the current data is stale so it invalidates the data and rwact query fetches new data using getTodo hook. Now, we have fresh data and the new todo shows up!
 
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
+This was a simplification of everything happening. Some things that might be helpful to read up on for more info:
+- Supabse
+- NextJS app router, api handlers
+- Tanstack query useQuery and useMutation
+- Tailwind CSS
+- ReactJS: motivation for the project, what it is, components. Popular hooks: useState, useRef, useContext, useMemo
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+## What do you do now
+Mainly, we want you to implement in similar ways, using this project structure, edit and delete todo functionality. TLs will be around to support you! Ask questions!
 
-## Feedback and issues
+## Bonus stuff
+- A webpage that is nice to look at(frontend)
+- Authentication(signing in users instead of using username input)
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
 
-## More Supabase examples
+## Setup and tips
+Make a .env file and put this inside
+```
+NEXT_PUBLIC_SUPABASE_URL=https://bsnfzfjxlxvgyabxqcbd.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_OR_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzbmZ6Zmp4bHh2Z3lhYnhxY2JkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk1NDkwNDgsImV4cCI6MjA3NTEyNTA0OH0.CvvV4LI2UmTV33D0snd7hcSMzDEtIFrSdLqbUn6dmRc
+```
+You need those keys to give you access to the supabse db I made. You can also make one for yourself and just swap the keys if you want to learn more about supabse and how the configuration works. Otherwise, I have created a todos table with fields you can find in the codebase.
 
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+***Start server*** by running:
+```
+npm run dev
+```
+in terminal at the root folder.
+
+
