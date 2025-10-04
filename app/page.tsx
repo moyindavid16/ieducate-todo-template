@@ -1,22 +1,29 @@
 "use client";
 
-import { AddTodoModal } from "@/domains/todo/components/AddTodoModal";
-import { TodoEntry } from "@/domains/todo/components/TodoEntry";
-import { defaultTodos } from "@/domains/todo/data";
-import { Todo } from "@/domains/todo/types";
+import {AddTodoModal} from "@/domains/todo/components/AddTodoModal";
+import {TodoEntry} from "@/domains/todo/components/TodoEntry";
+import {useGetTodos} from "@/domains/todo/hooks/useGetTodos";
+import {useCreateTodo} from "@/domains/todo/hooks/useCreateTodo";
 import {useState} from "react";
-
 
 export default function Home() {
   const [username, setUsername] = useState("");
-  const [todos, setTodos] = useState<Todo[]>(defaultTodos);
 
-  const handleAddTodo = (newTodo: Omit<Todo, "id">) => {
-    const todo: Todo = {
-      id: Date.now().toString(),
-      ...newTodo,
-    };
-    setTodos([...todos, todo]);
+  const {data: todos = [], isLoading, error} = useGetTodos(username);
+  const {mutate: createTodo} = useCreateTodo();
+
+  const handleAddTodo = (newTodo: {title: string; description: string}) => {
+    if (!username) {
+      alert("Please enter a username first");
+      return;
+    }
+    console.log("Reached")
+
+    createTodo({
+      title: newTodo.title,
+      description: newTodo.description,
+      username: username,
+    });
   };
 
   return (
@@ -39,6 +46,13 @@ export default function Home() {
           <AddTodoModal onAddTodo={handleAddTodo} />
         </div>
         <div className="space-y-4">
+          {isLoading && <div className="text-center text-gray-500">Loading todos...</div>}
+          {error && <div className="text-center text-red-500">Error loading todos: {error.message}</div>}
+          {!isLoading && !error && todos.length === 0 && (
+            <div className="text-center text-gray-500">
+              {username ? "No todos found. Add one above!" : "Enter a username to see your todos."}
+            </div>
+          )}
           {todos.map(todo => (
             <TodoEntry key={todo.id} todo={todo} />
           ))}

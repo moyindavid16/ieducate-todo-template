@@ -11,10 +11,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {Todo} from "../types";
 
 interface AddTodoModalProps {
-  onAddTodo: (todo: Omit<Todo, "id">) => void;
+  onAddTodo: (todo: {title: string; description: string}) => void;
 }
 
 export function AddTodoModal({onAddTodo}: AddTodoModalProps) {
